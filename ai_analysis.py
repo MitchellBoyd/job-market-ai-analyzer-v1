@@ -15,7 +15,7 @@ from openai import OpenAI
 import os
 from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("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"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 response = client.chat.completions.create(
     model="gpt-4.1-mini",
