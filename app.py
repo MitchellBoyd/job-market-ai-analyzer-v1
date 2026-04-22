@@ -24,6 +24,20 @@ filtered_df = df[
     (df["experience_level"] == experience_filter)
 ]
 
+total_jobs = len(filtered_df)
+
+if not filtered_df.empty:
+    avg_salary = int(filtered_df["salary_midpoint"].mean())
+else:
+    avg_salary = 0
+
+k1, k2 = st.columns(2)
+
+with k1:
+    st.metric("Total Jobs Found", total_jobs)
+
+with k2:
+    st.metric("Average Salary", f"${avg_salary:,}")
 # Preview
 
 st.subheader("Dataset Preview")
@@ -73,3 +87,9 @@ with open("ai_insights.txt", "r", encoding="utf-8") as f:
     insights = f.read()
 
 st.markdown(insights)
+st.download_button(
+    label="Download AI Report",
+    data=insights,
+    file_name="job_market_report.txt",
+    mime="text/plain"
+)
