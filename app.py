@@ -12,7 +12,6 @@ st.set_page_config(page_title="AI Job Market Analyzer", layout="wide")
 
 # Title
 st.title("AI Job Market Analyzer 📊")
-st.markdown("Analyze job demand, salary trends, and insights with interactive filters.")
 st.caption("Interactive dashboard showing job demand, salary trends, and AI-generated insights.")
 
 # Load data
