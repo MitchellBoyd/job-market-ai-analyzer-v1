@@ -18,7 +18,8 @@ st.caption("Interactive dashboard showing job demand, salary trends, and AI-gene
 # Load data
 df = pd.read_csv("cleaned_job_data.csv")
 
-st.sidebar.header("Filters")
+st.sidebar.title("Filters")
+st.sidebar.markdown("---")
 
 job_filter = st.sidebar.selectbox("Job Title", sorted(df["job_title"].unique()))
 location_filter = st.sidebar.selectbox("Location", sorted(df["location"].unique()))
