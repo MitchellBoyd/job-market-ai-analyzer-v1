@@ -16,7 +16,13 @@ st.markdown("Analyze job demand, salary trends, and insights with interactive fi
 st.caption("Interactive dashboard showing job demand, salary trends, and AI-generated insights.")
 
 # Load data
-df = pd.read_csv("cleaned_job_data.csv")
+import pandas as pd
+
+@st.cache_data
+def load_data():
+    return pd.read_csv("cleaned_job_data.csv", nrows=5000)
+
+df = load_data()
 
 st.sidebar.header("Filters")
 
