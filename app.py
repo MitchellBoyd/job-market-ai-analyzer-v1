@@ -4,10 +4,6 @@ import matplotlib.pyplot as plt
 
 st.set_page_config(layout="wide")
 
-st.title("AI Job Market Dashboard")
-
-st.caption("Real-time insights into job demand, salaries, and trends")
-
 st.set_page_config(page_title="AI Job Market Analyzer", layout="wide")
 
 # Title
