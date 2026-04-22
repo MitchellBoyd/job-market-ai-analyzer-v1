@@ -51,7 +51,7 @@ st.write(filtered_df.head())
 
 st.divider()
 
-# Charts + salary
+# --- MAIN DASHBOARD ---
 col1, col2 = st.columns([2, 1])
 
 # --- LEFT: JOB ROLES ---
