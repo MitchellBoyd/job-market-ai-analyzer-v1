@@ -30,22 +30,29 @@ filtered_df = df[
     (df["experience_level"] == experience_filter)
 ]
 # --- KPIs ---
+st.markdown("## 📊 Overview")
+
 total_jobs = len(filtered_df)
 
 if not filtered_df.empty:
     avg_salary = int(filtered_df["salary_midpoint"].mean())
+    median_salary = int(filtered_df["salary_midpoint"].median())
 else:
     avg_salary = 0
+    median_salary = 0
 
-k1, k2 = st.columns(2)
+k1, k2, k3 = st.columns(3)
 
 with k1:
-    st.metric("Total Jobs Found", total_jobs)
+    st.metric("Total Jobs", total_jobs)
 
 with k2:
-    st.metric("Average Salary", f"${avg_salary:,}")
-# Preview
+    st.metric("Avg Salary", f"${avg_salary:,}")
 
+with k3:
+    st.metric("Median Salary", f"${median_salary:,}")
+
+# Preview
 st.subheader("Dataset Preview")
 st.write(filtered_df.head())
 
