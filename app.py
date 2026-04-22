@@ -2,6 +2,12 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
+st.set_page_config(layout="wide")
+
+st.title("AI Job Market Dashboard")
+
+st.caption("Real-time insights into job demand, salaries, and trends")
+
 st.set_page_config(page_title="AI Job Market Analyzer", layout="wide")
 
 # Title
@@ -24,6 +30,7 @@ filtered_df = df[
     (df["experience_level"] == experience_filter)
 ]
 
+# --- KPIs ---
 total_jobs = len(filtered_df)
 
 if not filtered_df.empty:
@@ -38,8 +45,10 @@ with k1:
 
 with k2:
     st.metric("Average Salary", f"${avg_salary:,}")
-# Preview
 
+st.divider()
+
+# --- NEXT SECTION ---
 st.subheader("Dataset Preview")
 st.write(filtered_df.head())
 
