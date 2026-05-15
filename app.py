@@ -1,14 +1,13 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.express as px
 
 st.set_page_config(
     page_title="AI Job Market Dashboard",
     page_icon="📊",
     layout="wide"
 )
-
-st.set_page_config(page_title="AI Job Market Analyzer", layout="wide")
 
 # Title
 st.title("AI Job Market Analyzer 📊")
@@ -85,40 +84,44 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# --- JOB DEMAND TRENDS ---
+
 st.markdown("## 📈 Job Demand Trends")
 
-# Use broader data for trends
-trend_df = df[df["job_title"] == job_filter]
-
 trend_data = (
-    trend_df.groupby(["year", "month"])
+    filtered_df.groupby("post_date")
     .size()
     .reset_index(name="job_count")
 )
 
-trend_data["date"] = pd.to_datetime(
-    trend_data["year"].astype(str) + "-" + trend_data["month"].astype(str)
+trend_data["post_date"] = pd.to_datetime(trend_data["post_date"])
+
+trend_data = trend_data.sort_values("post_date")
+
+fig = px.line(
+    trend_data,
+    x="post_date",
+    y="job_count",
+    markers=True,
+    title="Job Demand Over Time"
 )
 
-trend_data = trend_data.sort_values("date")
-
-import matplotlib.pyplot as plt
-
-fig, ax = plt.subplots(figsize=(10, 4))
-
-ax.plot(
-    trend_data["date"],
-    trend_data["job_count"],
-    marker="o"
+fig.update_layout(
+    template="plotly_white",
+    xaxis_title="Date",
+    yaxis_title="Job Listings",
+    height=500
 )
 
-ax.set_title("Job Demand Over Time", fontsize=14, fontweight="bold")
-ax.set_xlabel("Date")
-ax.set_ylabel("Job Listings")
+st.plotly_chart(fig, use_container_width=True)
 
-ax.grid(True, linestyle="--", alpha=0.5)
+fig.update_layout(
+    template="plotly_white",
+    xaxis_title="Date",
+    yaxis_title="Job Listings",
+    height=500
+)
 
-st.pyplot(fig)
 
 st.divider()
 
@@ -131,14 +134,23 @@ with col1:
 
     job_counts = df["job_title"].value_counts().head(10)
 
-    fig, ax = plt.subplots()
-    job_counts.sort_values().plot(kind="barh", ax=ax)
+    fig = px.bar(
+    job_counts.sort_values(),
+    orientation="h",
+    title="Top Job Roles",
+    labels={
+    "value": "Number of Listings",
+    "y": "Job Title"
+}
+    
+)
 
-    ax.set_title("Top Job Roles")
-    ax.set_xlabel("Number of Job Listings")
-    ax.set_ylabel("Job Title")
+fig.update_layout(
+    template="plotly_white",
+    height=500
+)
 
-    st.pyplot(fig)
+st.plotly_chart(fig, use_container_width=True)
 
 # --- RIGHT: SALARY ---
 with col2:
@@ -168,18 +180,22 @@ skills_series = (
 
 top_skills = skills_series.value_counts().head(10)
 
-fig, ax = plt.subplots(figsize=(10,5))
-
-top_skills.sort_values().plot(
-    kind="barh",
-    ax=ax
+fig = px.bar(
+    top_skills.sort_values(),
+    orientation="h",
+    title="Most In Demand Skills",
+    labels={
+        "value": "Mentions",
+        "index": "Skill"
+    }
 )
 
-ax.set_title("Most In Demand Skills")
-ax.set_xlabel("Number of Mentions")
-ax.set_ylabel("Skill")
+fig.update_layout(
+    template="plotly_white",
+    height=500
+)
 
-st.pyplot(fig)
+st.plotly_chart(fig, use_container_width=True)
 
 # --- AI INSIGHTS ---
 st.divider()
