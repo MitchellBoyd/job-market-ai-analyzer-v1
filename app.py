@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.express as px
 
 st.set_page_config(
@@ -88,19 +87,21 @@ st.markdown(
 
 st.markdown("## 📈 Job Demand Trends")
 
+trend_df = df[df["job_title"] == job_filter].copy()
+
+trend_df["post_date"] = pd.to_datetime(trend_df["post_date"])
+
+trend_df["month"] = trend_df["post_date"].dt.to_period("M").astype(str)
+
 trend_data = (
-    filtered_df.groupby("post_date")
+    trend_df.groupby("month")
     .size()
     .reset_index(name="job_count")
 )
 
-trend_data["post_date"] = pd.to_datetime(trend_data["post_date"])
-
-trend_data = trend_data.sort_values("post_date")
-
 fig = px.line(
     trend_data,
-    x="post_date",
+    x="month",
     y="job_count",
     markers=True,
     title="Job Demand Over Time"
@@ -108,8 +109,9 @@ fig = px.line(
 
 fig.update_layout(
     template="plotly_white",
-    xaxis_title="Date",
+    xaxis_title="Month",
     yaxis_title="Job Listings",
+    yaxis=dict(dtick=1),
     height=500
 )
 
@@ -135,22 +137,20 @@ with col1:
     job_counts = df["job_title"].value_counts().head(10)
 
     fig = px.bar(
-    job_counts.sort_values(),
-    orientation="h",
-    title="Top Job Roles",
-    labels={
-    "value": "Number of Listings",
-    "y": "Job Title"
-}
-    
-)
+        job_counts.sort_values(),
+        orientation="h",
+        title="Top Job Roles",
+        labels={
+            "value": "Number of Listings",
+            "y": "Job Title"
+        }
+    )
 
-fig.update_layout(
-    template="plotly_white",
-    height=500
-)
+    fig.update_layout(
+        template="plotly_white",
+        height=500
+    )
 
-st.plotly_chart(fig, use_container_width=True)
 
 # --- RIGHT: SALARY ---
 with col2:
@@ -185,9 +185,10 @@ fig = px.bar(
     orientation="h",
     title="Most In Demand Skills",
     labels={
-        "value": "Mentions",
-        "index": "Skill"
-    }
+    "value": "Mentions",
+    "y": "Skill"
+}
+    
 )
 
 fig.update_layout(
